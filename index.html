@@ -41,16 +41,14 @@ button { cursor:pointer; }
   width:6px;
   height:220px;
   background:#555;
-  position:relative;
 }
 .line.active {
   animation: drop 1s linear;
   background:#fff;
 }
-
 @keyframes drop {
-  0% { box-shadow: 0 0 0 white; }
-  100% { box-shadow: 0 220px 0 white; }
+  from { box-shadow: 0 0 0 white; }
+  to   { box-shadow: 0 220px 0 white; }
 }
 </style>
 </head>
@@ -69,8 +67,8 @@ button { cursor:pointer; }
   <input id="name" placeholder="닉네임">
   <input id="point" type="number" placeholder="보유 금액">
   <br>
-  <button onclick="startOddEven()">홀짝</button>
-  <button onclick="startLadder()">사다리</button>
+  <button type="button" onclick="startOddEven()">홀짝</button>
+  <button type="button" onclick="startLadder()">사다리</button>
 </div>
 
 <!-- 게임 -->
@@ -89,19 +87,33 @@ button { cursor:pointer; }
   </div>
 
   <p id="result"></p>
-  <button onclick="back()">← 메인</button>
+  <button type="button" onclick="back()">← 메인</button>
 </div>
 
 <script>
 let name, point;
 
-// 상단 표시
+/* DOM */
+const nameInput = document.getElementById("name");
+const pointInput = document.getElementById("point");
+const betInput = document.getElementById("bet");
+const main = document.getElementById("main");
+const game = document.getElementById("game");
+const top = document.getElementById("top");
+const topName = document.getElementById("topName");
+const topPoint = document.getElementById("topPoint");
+const gameTitle = document.getElementById("gameTitle");
+const gameArea = document.getElementById("gameArea");
+const result = document.getElementById("result");
+const ladder = document.getElementById("ladder");
+
+/* 상단 */
 function updateTop() {
   topName.innerText = name;
   topPoint.innerText = point;
 }
 
-// 공통 전환
+/* 공통 */
 function showGame(title) {
   main.classList.add("hidden");
   game.classList.remove("hidden");
@@ -111,7 +123,6 @@ function showGame(title) {
   updateTop();
 }
 
-// 초기 체크
 function initPlayer() {
   name = nameInput.value;
   point = Number(pointInput.value);
@@ -122,14 +133,14 @@ function initPlayer() {
   return true;
 }
 
-// 홀짝
+/* 홀짝 */
 function startOddEven() {
   if (!initPlayer()) return;
   showGame("홀짝");
   ladder.classList.add("hidden");
   gameArea.innerHTML = `
-    <button onclick="oddEven('홀')">홀</button>
-    <button onclick="oddEven('짝')">짝</button>
+    <button type="button" onclick="oddEven('홀')">홀</button>
+    <button type="button" onclick="oddEven('짝')">짝</button>
   `;
 }
 
@@ -145,7 +156,7 @@ function oddEven(choice) {
   result.innerText = `결과: ${r} / 배율 ${m}`;
 }
 
-// 사다리
+/* 사다리 */
 function startLadder() {
   if (!initPlayer()) return;
   showGame("사다리");
@@ -154,11 +165,11 @@ function startLadder() {
 
   gameArea.innerHTML = `
     <p>번호 선택</p>
-    <button onclick="ladderPlay(1)">1</button>
-    <button onclick="ladderPlay(2)">2</button>
-    <button onclick="ladderPlay(3)">3</button>
-    <button onclick="ladderPlay(4)">4</button>
-    <button onclick="ladderPlay(5)">5</button>
+    <button type="button" onclick="ladderPlay(1)">1</button>
+    <button type="button" onclick="ladderPlay(2)">2</button>
+    <button type="button" onclick="ladderPlay(3)">3</button>
+    <button type="button" onclick="ladderPlay(4)">4</button>
+    <button type="button" onclick="ladderPlay(5)">5</button>
   `;
 }
 
@@ -167,8 +178,7 @@ function ladderPlay(num) {
   if (bet === null) return;
 
   resetLines();
-  const line = document.getElementById("l" + num);
-  line.classList.add("active");
+  document.getElementById("l" + num).classList.add("active");
 
   const multipliers = [3, 2, 0, -1, -2].sort(() => Math.random() - 0.5);
   const multi = multipliers[num - 1];
@@ -184,7 +194,7 @@ function resetLines() {
   document.querySelectorAll(".line").forEach(l => l.classList.remove("active"));
 }
 
-// 배팅 체크
+/* 배팅 */
 function betCheck() {
   const bet = Number(betInput.value);
   if (!bet || bet <= 0) {
@@ -198,29 +208,13 @@ function betCheck() {
   return bet;
 }
 
-// 메인 복귀
+/* 복귀 */
 function back() {
   game.classList.add("hidden");
   main.classList.remove("hidden");
   top.classList.add("hidden");
   betInput.value = "";
 }
-
-// DOM shortcuts
-  function updateTop() {
-  topName.innerText = name;
-  topPoint.innerText = point;
-}
-const nameInput = document.getElementById("name");
-const pointInput = document.getElementById("point");
-const betInput = document.getElementById("bet");
-const main = document.getElementById("main");
-const game = document.getElementById("game");
-const top = document.getElementById("top");
-const gameTitle = document.getElementById("gameTitle");
-const gameArea = document.getElementById("gameArea");
-const result = document.getElementById("result");
-const ladder = document.getElementById("ladder");
 </script>
 
 </body>

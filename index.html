@@ -1,105 +1,124 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>홀짝 / 사다리 게임</title>
+<meta charset="UTF-8">
+<title>홀짝 / 사다리 게임</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-    }
+<style>
+body {
+  background:#111;
+  color:#fff;
+  font-family:Arial;
+  text-align:center;
+  padding:30px;
+}
 
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
+input, button {
+  padding:10px;
+  margin:5px;
+  font-size:16px;
+}
 
-    button {
-      cursor: pointer;
-    }
+button { cursor:pointer; }
 
-    .box {
-      border: 1px solid #444;
-      padding: 20px;
-      margin-top: 20px;
-    }
+.box {
+  border:1px solid #444;
+  padding:20px;
+  margin-top:20px;
+}
 
-    /* 사다리 */
-    .ladder {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-    }
-
-    .line {
-      width: 4px;
-      height: 200px;
-      background: white;
-      position: relative;
-    }
-
-    .bridge {
-      position: absolute;
-      width: 40px;
-      height: 4px;
-      background: white;
-      top: 60px;
-      left: 0;
-    }
-  </style>
+.hidden { display:none; }
+</style>
 </head>
 
 <body>
 
-  <h1>🎲 홀짝 / 사다리 게임</h1>
+<h1>🎮 홀짝 / 사다리</h1>
 
-  <div class="box">
-    <input id="name" placeholder="닉네임 입력">
-    <input id="point" type="number" placeholder="포인트">
-    <br>
-    <button onclick="choose('홀')">홀</button>
-    <button onclick="choose('짝')">짝</button>
-    <button onclick="choose('사다리')">사다리</button>
-  </div>
+<!-- 메인 화면 -->
+<div id="main" class="box">
+  <input id="name" placeholder="닉네임">
+  <input id="point" type="number" placeholder="보유 포인트">
+  <br>
+  <button onclick="startOddEven()">홀짝</button>
+  <button onclick="startLadder()">사다리</button>
+</div>
 
-  <div class="box" id="result">
-    결과가 여기 표시됩니다
-  </div>
+<!-- 게임 화면 -->
+<div id="game" class="box hidden">
+  <h2 id="gameTitle"></h2>
+  <div id="gameArea"></div>
+  <p id="status"></p>
+  <button onclick="back()">← 메인으로</button>
+</div>
 
-  <div class="ladder" id="ladder" style="display:none;">
-    <div class="line">
-      <div class="bridge"></div>
-    </div>
-    <div class="line"></div>
-  </div>
+<script>
+let name, point;
 
-  <script>
-    function choose(type) {
-      const name = document.getElementById("name").value;
-      const point = document.getElementById("point").value;
+// 화면 전환 공통
+function showGame(title) {
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("gameTitle").innerText = title;
+}
 
-      if (!name || !point) {
-        alert("닉네임과 포인트를 입력하세요!");
-        return;
-      }
+// 메인 → 홀짝
+function startOddEven() {
+  name = document.getElementById("name").value;
+  point = Number(document.getElementById("point").value);
+  if (!name || !point) return alert("닉네임과 포인트 입력!");
 
-      let text = `${name}님 / 포인트: ${point}\n선택: ${type}`;
+  showGame("🎲 홀짝 게임");
+  document.getElementById("gameArea").innerHTML = `
+    <button onclick="oddEven('홀')">홀</button>
+    <button onclick="oddEven('짝')">짝</button>
+  `;
+}
 
-      document.getElementById("result").innerText = text;
+// 홀짝 결과
+function oddEven(choice) {
+  const result = Math.random() < 0.5 ? "홀" : "짝";
+  let multi = (choice === result) ? 2 : -1;
+  point *= multi;
 
-      if (type === "사다리") {
-        document.getElementById("ladder").style.display = "flex";
-      } else {
-        document.getElementById("ladder").style.display = "none";
-      }
-    }
-  </script>
+  document.getElementById("status").innerText =
+    `${name} 선택: ${choice}\n결과: ${result}\n현재 포인트: ${point}`;
+}
+
+// 메인 → 사다리
+function startLadder() {
+  name = document.getElementById("name").value;
+  point = Number(document.getElementById("point").value);
+  if (!name || !point) return alert("닉네임과 포인트 입력!");
+
+  showGame("🪜 사다리 게임");
+  document.getElementById("gameArea").innerHTML = `
+    <p>번호 선택</p>
+    <button onclick="ladder(1)">1</button>
+    <button onclick="ladder(2)">2</button>
+    <button onclick="ladder(3)">3</button>
+    <button onclick="ladder(4)">4</button>
+    <button onclick="ladder(5)">5</button>
+  `;
+}
+
+// 사다리 결과
+function ladder(num) {
+  const multiMap = {1:3, 2:2, 3:0, 4:-1, 5:-2};
+  const multi = multiMap[num];
+  point *= multi;
+
+  document.getElementById("status").innerText =
+    `${name} 선택: ${num}\n배율: ${multi}\n현재 포인트: ${point}`;
+}
+
+// 메인으로
+function back() {
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("main").classList.remove("hidden");
+  document.getElementById("status").innerText = "";
+}
+</script>
 
 </body>
 </html>

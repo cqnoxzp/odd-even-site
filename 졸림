@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>포인트 게임</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🎲 포인트 게임</h1>
+  <p>보유 포인트: <span id="points">1000</span>P</p>
+
+  <h2>홀짝 게임</h2>
+  <input type="number" id="oddEvenBet" placeholder="배팅 포인트">
+  <br>
+  <button onclick="playOddEven('odd')">홀</button>
+  <button onclick="playOddEven('even')">짝</button>
+  <p id="oddEvenResult"></p>
+
+  <h2>사다리 게임</h2>
+  <input type="number" id="ladderBet" placeholder="배팅 포인트">
+  <br>
+  <button onclick="playLadder('A')">A</button>
+  <button onclick="playLadder('B')">B</button>
+  <button onclick="playLadder('C')">C</button>
+  <p id="ladderResult"></p>
+
+  <script src="script.js"></script>
+</body>
+</html>

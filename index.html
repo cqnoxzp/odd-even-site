@@ -64,8 +64,8 @@ button { cursor:pointer; }
 
 <!-- 메인 -->
 <div id="main" class="box">
-  <input id="name" placeholder="닉네임">
-  <input id="point" type="number" placeholder="보유 금액">
+  <input id="playerNameInput" placeholder="닉네임">
+  <input id="pointInput" type="number" placeholder="보유 금액">
   <br>
   <button type="button" onclick="startOddEven()">홀짝</button>
   <button type="button" onclick="startLadder()">사다리</button>
@@ -74,7 +74,7 @@ button { cursor:pointer; }
 <!-- 게임 -->
 <div id="game" class="box hidden">
   <h2 id="gameTitle"></h2>
-  <input id="bet" type="number" placeholder="배팅 금액">
+  <input id="betInput" type="number" placeholder="배팅 금액">
 
   <div id="gameArea"></div>
 
@@ -91,15 +91,19 @@ button { cursor:pointer; }
 </div>
 
 <script>
-let name, point;
+/* 상태 */
+let playerName = "";
+let point = 0;
 
 /* DOM */
-const nameInput = document.getElementById("name");
-const pointInput = document.getElementById("point");
-const betInput = document.getElementById("bet");
 const main = document.getElementById("main");
 const game = document.getElementById("game");
 const top = document.getElementById("top");
+
+const playerNameInput = document.getElementById("playerNameInput");
+const pointInput = document.getElementById("pointInput");
+const betInput = document.getElementById("betInput");
+
 const topName = document.getElementById("topName");
 const topPoint = document.getElementById("topPoint");
 const gameTitle = document.getElementById("gameTitle");
@@ -107,13 +111,24 @@ const gameArea = document.getElementById("gameArea");
 const result = document.getElementById("result");
 const ladder = document.getElementById("ladder");
 
-/* 상단 */
+/* 상단 갱신 */
 function updateTop() {
-  topName.innerText = name;
+  topName.innerText = playerName;
   topPoint.innerText = point;
 }
 
 /* 공통 */
+function initPlayer() {
+  playerName = playerNameInput.value.trim();
+  point = Number(pointInput.value);
+
+  if (!playerName || !point) {
+    alert("닉네임과 보유 금액을 입력해 주세요.");
+    return false;
+  }
+  return true;
+}
+
 function showGame(title) {
   main.classList.add("hidden");
   game.classList.remove("hidden");
@@ -123,21 +138,13 @@ function showGame(title) {
   updateTop();
 }
 
-function initPlayer() {
-  name = nameInput.value;
-  point = Number(pointInput.value);
-  if (!name || !point) {
-    alert("닉네임과 보유 금액을 입력해 주세요.");
-    return false;
-  }
-  return true;
-}
-
 /* 홀짝 */
 function startOddEven() {
   if (!initPlayer()) return;
+
   showGame("홀짝");
   ladder.classList.add("hidden");
+
   gameArea.innerHTML = `
     <button type="button" onclick="oddEven('홀')">홀</button>
     <button type="button" onclick="oddEven('짝')">짝</button>
@@ -149,16 +156,18 @@ function oddEven(choice) {
   if (bet === null) return;
 
   const r = Math.random() < 0.5 ? "홀" : "짝";
-  const m = (choice === r) ? 2 : -1;
-  point += bet * m;
+  const multi = (choice === r) ? 2 : -1;
+
+  point += bet * multi;
   updateTop();
 
-  result.innerText = `결과: ${r} / 배율 ${m}`;
+  result.innerText = `결과: ${r} / 배율 ${multi}`;
 }
 
 /* 사다리 */
 function startLadder() {
   if (!initPlayer()) return;
+
   showGame("사다리");
   ladder.classList.remove("hidden");
   resetLines();
@@ -208,7 +217,7 @@ function betCheck() {
   return bet;
 }
 
-/* 복귀 */
+/* 메인 복귀 */
 function back() {
   game.classList.add("hidden");
   main.classList.remove("hidden");

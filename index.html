@@ -76,7 +76,7 @@ button { cursor:pointer; }
 <!-- 게임 -->
 <div id="game" class="box hidden">
   <h2 id="gameTitle"></h2>
-  <input id="bet" type="number" placeholder="배팅 금액액">
+  <input id="bet" type="number" placeholder="배팅 금액">
 
   <div id="gameArea"></div>
 
@@ -207,6 +207,10 @@ function back() {
 }
 
 // DOM shortcuts
+  function updateTop() {
+  topName.innerText = name;
+  topPoint.innerText = point;
+}
 const nameInput = document.getElementById("name");
 const pointInput = document.getElementById("point");
 const betInput = document.getElementById("bet");

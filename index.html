@@ -7,23 +7,43 @@
 </head>
 <body>
 
-  <h1>🎲 포인트 게임</h1>
-  <p>보유 포인트: <span id="points">1000</span>P</p>
+  <!-- 닉네임 입력 -->
+  <div id="login">
+    <h1>🎮 포인트 게임</h1>
+    <input type="text" id="nicknameInput" placeholder="닉네임 입력">
+    <br><br>
+    <button onclick="startGame()">시작하기</button>
+  </div>
 
-  <h2>홀짝 게임</h2>
-  <input type="number" id="oddEvenBet" placeholder="배팅 포인트">
-  <br>
-  <button onclick="playOddEven('odd')">홀</button>
-  <button onclick="playOddEven('even')">짝</button>
-  <p id="oddEvenResult"></p>
+  <!-- 메인 -->
+  <div id="main" style="display:none;">
+    <h2><span id="nickname"></span> 님</h2>
+    <p>보유 포인트: <span id="points">0</span>P</p>
 
-  <h2>사다리 게임</h2>
-  <input type="number" id="ladderBet" placeholder="배팅 포인트">
-  <br>
-  <button onclick="playLadder('A')">A</button>
-  <button onclick="playLadder('B')">B</button>
-  <button onclick="playLadder('C')">C</button>
-  <p id="ladderResult"></p>
+    <button onclick="showGame('oddEven')">홀짝 게임</button>
+    <button onclick="showGame('ladder')">사다리 게임</button>
+
+    <!-- 홀짝 -->
+    <div id="oddEven" style="display:none;">
+      <h3>홀짝 게임</h3>
+      <input type="number" id="oddEvenBet" placeholder="배팅 포인트">
+      <br>
+      <button onclick="playOddEven('odd')">홀</button>
+      <button onclick="playOddEven('even')">짝</button>
+      <p id="oddEvenResult"></p>
+    </div>
+
+    <!-- 사다리 -->
+    <div id="ladder" style="display:none;">
+      <h3>사다리 게임</h3>
+      <input type="number" id="ladderBet" placeholder="배팅 포인트">
+      <br>
+      <button onclick="playLadder('A')">A</button>
+      <button onclick="playLadder('B')">B</button>
+      <button onclick="playLadder('C')">C</button>
+      <p id="ladderResult"></p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

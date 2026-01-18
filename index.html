@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>홀짝 / 사다리 게임</title>
+<title>바카라</title>
 
 <style>
 body {
@@ -67,7 +67,7 @@ button { cursor:pointer; }
 <!-- 메인 -->
 <div id="main" class="box">
   <input id="name" placeholder="닉네임">
-  <input id="point" type="number" placeholder="보유 포인트">
+  <input id="point" type="number" placeholder="보유 금액">
   <br>
   <button onclick="startOddEven()">홀짝</button>
   <button onclick="startLadder()">사다리</button>
@@ -76,7 +76,7 @@ button { cursor:pointer; }
 <!-- 게임 -->
 <div id="game" class="box hidden">
   <h2 id="gameTitle"></h2>
-  <input id="bet" type="number" placeholder="배팅 포인트">
+  <input id="bet" type="number" placeholder="배팅 금액액">
 
   <div id="gameArea"></div>
 
@@ -116,7 +116,7 @@ function initPlayer() {
   name = nameInput.value;
   point = Number(pointInput.value);
   if (!name || !point) {
-    alert("닉네임과 포인트 입력!");
+    alert("닉네임과 보유 금액을 입력해 주세요.");
     return false;
   }
   return true;
@@ -125,7 +125,7 @@ function initPlayer() {
 // 홀짝
 function startOddEven() {
   if (!initPlayer()) return;
-  showGame("🎲 홀짝");
+  showGame("홀짝");
   ladder.classList.add("hidden");
   gameArea.innerHTML = `
     <button onclick="oddEven('홀')">홀</button>
@@ -148,7 +148,7 @@ function oddEven(choice) {
 // 사다리
 function startLadder() {
   if (!initPlayer()) return;
-  showGame("🪜 사다리");
+  showGame("사다리");
   ladder.classList.remove("hidden");
   resetLines();
 
@@ -188,11 +188,11 @@ function resetLines() {
 function betCheck() {
   const bet = Number(betInput.value);
   if (!bet || bet <= 0) {
-    alert("배팅 포인트 입력!");
+    alert("배팅 금액을 입력해 주세요.");
     return null;
   }
   if (bet > point) {
-    alert("보유 포인트 초과!");
+    alert("보유 금액을 초과했습니다.");
     return null;
   }
   return bet;

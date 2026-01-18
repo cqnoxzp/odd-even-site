@@ -1,12 +1,38 @@
+let nickname = localStorage.getItem("nickname");
 let points = localStorage.getItem("points")
   ? parseInt(localStorage.getItem("points"))
   : 1000;
 
-updatePoints();
+if (nickname) {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("main").style.display = "block";
+  document.getElementById("nickname").innerText = nickname;
+  updatePoints();
+}
+
+function startGame() {
+  const input = document.getElementById("nicknameInput").value;
+  if (!input) return alert("닉네임을 입력하세요!");
+
+  nickname = input;
+  localStorage.setItem("nickname", nickname);
+  localStorage.setItem("points", points);
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("main").style.display = "block";
+  document.getElementById("nickname").innerText = nickname;
+  updatePoints();
+}
 
 function updatePoints() {
   document.getElementById("points").innerText = points;
   localStorage.setItem("points", points);
+}
+
+function showGame(game) {
+  document.getElementById("oddEven").style.display = "none";
+  document.getElementById("ladder").style.display = "none";
+  document.getElementById(game).style.display = "block";
 }
 
 function playOddEven(choice) {
